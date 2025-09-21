@@ -1,0 +1,31 @@
+# Vercel ignore file for frontend
+
+# Development
+.env.local
+.env.development
+
+# Testing
+src/**/*.test.js
+src/**/*.test.tsx
+src/**/*.spec.js
+src/**/*.spec.tsx
+coverage/
+
+# Documentation
+*.md
+!README.md
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Source maps (comment out if you want them in production)
+# *.map

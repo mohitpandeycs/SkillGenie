@@ -1,0 +1,16 @@
+{
+  "name": "skillgenie-monorepo",
+  "version": "1.0.0",
+  "description": "SkillGenie - AI Career Intelligence Platform",
+  "scripts": {
+    "start": "cd backend && npm start",
+    "build": "cd backend && npm install",
+    "dev": "cd backend && npm run dev",
+    "frontend": "cd skillgenie && npm start",
+    "frontend-build": "cd skillgenie && npm run build"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=7.0.0"
+  }
+}

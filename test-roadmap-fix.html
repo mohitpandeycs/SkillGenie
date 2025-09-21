@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Roadmap Fix</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .test-section {
+            background: #2a2a2a;
+            border: 1px solid #3a3a3a;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .result {
+            background: #1a1a1a;
+            border: 1px solid #3a3a3a;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+        }
+        .success { border-color: #4CAF50; }
+        .warning { border-color: #ff9800; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Roadmap Error Fix Test</h1>
+    
+    <div class="test-section">
+        <h2>✅ Error Fixed!</h2>
+        <p>The roadmap page error has been fixed with the following improvements:</p>
+        
+        <div class="result success">
+✅ FIXES APPLIED:
+
+1. Added null checks for chapters mapping:
+   - (chapters || []).map() instead of chapters.map()
+   
+2. Added null checks for subChapters:
+   - (chapter.subChapters || []).map()
+   
+3. Added null checks for resources:
+   - (chapter.resources || []).map()
+   
+4. Added proper data structure validation:
+   - Ensures roadmap has required properties
+   - Provides fallback values for missing data
+   
+5. Added fallback UI when no chapters available:
+   - Shows "No Roadmap Available" message
+   - Prompts to complete questionnaire if needed
+
+6. Fixed syntax error:
+   - Added missing closing parenthesis for conditional rendering
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>🧪 How to Test</h2>
+        <div class="result warning">
+TESTING STEPS:
+
+1. Complete questionnaire with Mobile Development preference:
+   - Go to http://localhost:3000/questionnaire
+   - Fill out all steps and submit
+
+2. Go to analysis page:
+   - Visit http://localhost:3000/analysis
+   - Should see "View Complete Roadmap" button
+
+3. Click "View Complete Roadmap":
+   - Should go to http://localhost:3000/roadmap
+   - Should show loading animation
+   - Should generate Mobile Development roadmap (not Python!)
+
+4. Verify no errors:
+   - Check browser console for errors
+   - Should see roadmap chapters loading properly
+   - No "Cannot read properties of undefined" errors
+
+EXPECTED RESULT:
+- Roadmap page loads without errors
+- Shows Mobile Development roadmap based on questionnaire
+- All chapters, subchapters, and resources display properly
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>🎯 What's Different Now</h2>
+        <div class="result success">
+BEFORE (Error):
+❌ TypeError: Cannot read properties of undefined (reading 'map')
+❌ Roadmap page crashed when trying to display chapters
+❌ Static Python roadmap always shown
+
+AFTER (Fixed):
+✅ Proper null checking prevents crashes
+✅ Roadmap generates based on questionnaire data
+✅ Shows appropriate fallback messages
+✅ Dynamic content for different skills
+✅ Graceful error handling
+        </div>
+    </div>
+</body>
+</html>

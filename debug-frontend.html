@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Frontend Connection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .debug-section {
+            background: #2a2a2a;
+            border: 1px solid #3a3a3a;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .result {
+            background: #1a1a1a;
+            border: 1px solid #3a3a3a;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .success { border-color: #4CAF50; }
+        .error { border-color: #f44336; }
+        .warning { border-color: #ff9800; }
+        select {
+            padding: 8px;
+            margin: 5px;
+            background: #333;
+            color: white;
+            border: 1px solid #555;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Debug Frontend-Backend Connection</h1>
+    
+    <div class="debug-section">
+        <h2>1. Test Backend API Directly</h2>
+        <p>First, let's verify the backend is returning different content for different skills:</p>
+        
+        <select id="skillSelect">
+            <option value="Mobile Development">Mobile Development</option>
+            <option value="Data Science">Data Science</option>
+            <option value="Python">Python</option>
+            <option value="React">React</option>
+            <option value="JavaScript">JavaScript</option>
+        </select>
+        
+        <select id="locationSelect">
+            <option value="USA">USA</option>
+            <option value="India">India</option>
+            <option value="UK">UK</option>
+        </select>
+        
+        <button onclick="testBackendAPI()">Test Backend API</button>
+        <div id="backend-result" class="result">Click "Test Backend API" to check if backend returns different content...</div>
+    </div>
+
+    <div class="debug-section">
+        <h2>2. Test Frontend Service</h2>
+        <p>Test if the frontend roadmapService is working correctly:</p>
+        <button onclick="testFrontendService()">Test Frontend Service</button>
+        <div id="frontend-result" class="result">Click "Test Frontend Service" to check frontend API calls...</div>
+    </div>
+
+    <div class="debug-section">
+        <h2>3. Compare Results</h2>
+        <button onclick="compareResults()">Compare All Skills</button>
+        <div id="compare-result" class="result">Click "Compare All Skills" to see if each skill returns different data...</div>
+    </div>
+
+    <div class="debug-section">
+        <h2>4. Debug Instructions</h2>
+        <div class="result warning">
+If you see the same content for all skills:
+1. Check if backend server is running on port 5000
+2. Check if there are any CORS errors in browser console
+3. Verify the analytics API endpoint is working
+4. Check if React component is properly calling the API
+
+Expected Results:
+- Mobile Development: Should show mobile-specific salary and market data
+- Data Science: Should show data science salary ranges
+- Python: Should show Python developer market info
+- Each skill should have DIFFERENT salary ranges and growth rates
+        </div>
+    </div>
+
+    <script>
+        async function testBackendAPI() {
+            const skill = document.getElementById('skillSelect').value;
+            const location = document.getElementById('locationSelect').value;
+            const resultDiv = document.getElementById('backend-result');
+            
+            resultDiv.textContent = `Testing backend API for ${skill} in ${location}...`;
+            
+            try {
+                const response = await fetch(`http://localhost:5000/api/analytics/market/dynamic?skill=${encodeURIComponent(skill)}&location=${encodeURIComponent(location)}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const result = `✅ Backend API Response for ${skill}:
+
+Skill: "${data.data.skill}"
+Location: "${data.data.location}"
+Average Salary: ${data.data.marketOverview?.averageSalary}
+Demand Level: ${data.data.marketOverview?.demandLevel}
+Growth Rate: ${data.data.marketOverview?.growthRate}
+Job Openings: ${data.data.marketOverview?.jobOpenings}
+Generated by: ${data.generatedBy}
+
+✅ Skill Match: ${data.data.skill === skill ? 'YES' : 'NO - ERROR!'}
+✅ Location Match: ${data.data.location === location ? 'YES' : 'NO - ERROR!'}`;
+                    
+                    resultDiv.textContent = result;
+                    resultDiv.className = `result ${data.data.skill === skill ? 'success' : 'error'}`;
+                } else {
+                    resultDiv.textContent = `❌ Backend API Error: ${data.message}`;
+                    resultDiv.className = 'result error';
+                }
+            } catch (error) {
+                resultDiv.textContent = `❌ Network Error: ${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+
+        async function testFrontendService() {
+            const resultDiv = document.getElementById('frontend-result');
+            resultDiv.textContent = 'Testing frontend service...';
+            
+            try {
+                // Simulate what the React component does
+                const skill = 'Mobile Development';
+                const location = 'USA';
+                
+                // This mimics the roadmapService.generateDynamicAnalytics call
+                const params = new URLSearchParams({ skill, location });
+                const response = await fetch(`http://localhost:5000/api/analytics/market/dynamic?${params}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultDiv.textContent = `✅ Frontend Service Test:
+
+API URL: http://localhost:5000/api/analytics/market/dynamic?${params}
+Response Status: ${response.status}
+Success: ${data.success}
+Skill Returned: "${data.data.skill}"
+Expected Skill: "${skill}"
+Match: ${data.data.skill === skill ? 'YES ✅' : 'NO ❌'}
+
+This is exactly what your React component should receive.`;
+                    resultDiv.className = 'result success';
+                } else {
+                    resultDiv.textContent = `❌ Frontend Service Error: ${data.message}`;
+                    resultDiv.className = 'result error';
+                }
+            } catch (error) {
+                resultDiv.textContent = `❌ Frontend Service Error: ${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+
+        async function compareResults() {
+            const resultDiv = document.getElementById('compare-result');
+            resultDiv.textContent = 'Comparing results for different skills...';
+            
+            const skills = ['Mobile Development', 'Data Science', 'Python', 'React'];
+            const results = [];
+            
+            try {
+                for (const skill of skills) {
+                    const response = await fetch(`http://localhost:5000/api/analytics/market/dynamic?skill=${encodeURIComponent(skill)}&location=USA`);
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        results.push({
+                            requested: skill,
+                            returned: data.data.skill,
+                            salary: data.data.marketOverview?.averageSalary,
+                            growth: data.data.marketOverview?.growthRate,
+                            demand: data.data.marketOverview?.demandLevel,
+                            match: data.data.skill === skill
+                        });
+                    }
+                }
+                
+                let comparison = '📊 SKILL COMPARISON RESULTS:\n\n';
+                results.forEach(result => {
+                    comparison += `${result.match ? '✅' : '❌'} ${result.requested}:
+  Returned: "${result.returned}"
+  Salary: ${result.salary}
+  Growth: ${result.growth}
+  Demand: ${result.demand}
+  Match: ${result.match ? 'YES' : 'NO'}
+
+`;
+                });
+                
+                const allMatch = results.every(r => r.match);
+                const allSame = results.every(r => r.salary === results[0].salary);
+                
+                comparison += `\n📈 ANALYSIS:
+✅ All skills return correct names: ${allMatch ? 'YES' : 'NO'}
+❌ All skills return same salary: ${allSame ? 'YES - PROBLEM!' : 'NO - GOOD!'}
+${allSame ? '🚨 ERROR: Backend is returning identical data for all skills!' : '🎉 SUCCESS: Each skill returns unique data!'}`;
+                
+                resultDiv.textContent = comparison;
+                resultDiv.className = `result ${allMatch && !allSame ? 'success' : 'error'}`;
+                
+            } catch (error) {
+                resultDiv.textContent = `❌ Comparison Error: ${error.message}`;
+                resultDiv.className = 'result error';
+            }
+        }
+    </script>
+</body>
+</html>

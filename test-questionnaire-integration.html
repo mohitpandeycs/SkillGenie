@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Questionnaire Integration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .test-section {
+            background: #2a2a2a;
+            border: 1px solid #3a3a3a;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .result {
+            background: #1a1a1a;
+            border: 1px solid #3a3a3a;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+        }
+        .success { border-color: #4CAF50; }
+        .warning { border-color: #ff9800; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test Questionnaire Integration</h1>
+    
+    <div class="test-section">
+        <h2>1. Simulate Questionnaire Data</h2>
+        <p>This will create mock questionnaire data to test the integration:</p>
+        <button onclick="createMockQuestionnaireData()">Create Mock Data</button>
+        <button onclick="clearQuestionnaireData()">Clear Data</button>
+        <div id="mock-result" class="result">Click "Create Mock Data" to simulate questionnaire completion...</div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Test Data Retrieval</h2>
+        <p>Check if the analysis page can read questionnaire data:</p>
+        <button onclick="testDataRetrieval()">Test Data Retrieval</button>
+        <div id="retrieval-result" class="result">Click "Test Data Retrieval" to check stored data...</div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. Instructions</h2>
+        <div class="result warning">
+How to test the complete flow:
+
+1. Click "Create Mock Data" above
+2. Go to http://localhost:3000/analysis
+3. You should see:
+   - "📋 Based on your questionnaire" in the header
+   - "Personalized Recommendations" section
+   - Analysis for "Mobile Development" (from mock data)
+   - No yellow questionnaire prompt
+
+4. To test without questionnaire:
+   - Click "Clear Data" above
+   - Refresh the analysis page
+   - You should see:
+     - "⚠️ Using default settings" in header
+     - Yellow questionnaire prompt
+     - Option to "Take Questionnaire"
+
+5. To test real questionnaire:
+   - Go to http://localhost:3000/questionnaire
+   - Complete all steps
+   - Submit questionnaire
+   - Analysis page will use your actual responses
+        </div>
+    </div>
+
+    <script>
+        function createMockQuestionnaireData() {
+            const mockData = {
+                education: 'undergraduate',
+                experience: 'some_experience',
+                currentSkills: ['Programming', 'Problem Solving'],
+                interests: ['Technology', 'Innovation'],
+                learningStyle: 'practical',
+                timeCommitment: 'part_time',
+                careerGoals: 'Become a mobile app developer',
+                preferredDomains: ['mobile_dev', 'web_dev'],
+                timestamp: new Date().toISOString(),
+                id: Date.now().toString()
+            };
+
+            localStorage.setItem('skillgenie_questionnaire_data', JSON.stringify(mockData));
+            
+            document.getElementById('mock-result').textContent = `✅ Mock questionnaire data created:
+
+Education: ${mockData.education}
+Experience: ${mockData.experience}
+Skills: ${mockData.currentSkills.join(', ')}
+Learning Style: ${mockData.learningStyle}
+Career Goals: ${mockData.careerGoals}
+Preferred Domains: ${mockData.preferredDomains.join(', ')}
+
+This should make the analysis page show:
+- Primary Skill: Mobile Development
+- Experience Level: Intermediate
+- Learning Style: Practical`;
+            
+            document.getElementById('mock-result').className = 'result success';
+        }
+
+        function clearQuestionnaireData() {
+            localStorage.removeItem('skillgenie_questionnaire_data');
+            document.getElementById('mock-result').textContent = '🗑️ Questionnaire data cleared. Analysis page will now show default settings.';
+            document.getElementById('mock-result').className = 'result warning';
+        }
+
+        function testDataRetrieval() {
+            const data = localStorage.getItem('skillgenie_questionnaire_data');
+            const resultDiv = document.getElementById('retrieval-result');
+            
+            if (data) {
+                const parsed = JSON.parse(data);
+                
+                // Simulate the mapping logic
+                const domainSkillMap = {
+                    'ai_ml': 'Machine Learning',
+                    'web_dev': 'Web Development', 
+                    'data_science': 'Data Science',
+                    'cybersecurity': 'Cybersecurity',
+                    'cloud_computing': 'Cloud Computing',
+                    'mobile_dev': 'Mobile Development',
+                    'ui_ux': 'UI/UX Design',
+                    'product_management': 'Product Management'
+                };
+                
+                const primarySkill = domainSkillMap[parsed.preferredDomains[0]] || 'Data Science';
+                
+                const experienceMap = {
+                    'beginner': 'beginner',
+                    'some_experience': 'intermediate', 
+                    'experienced': 'advanced',
+                    'expert': 'advanced'
+                };
+                
+                const experienceLevel = experienceMap[parsed.experience] || 'beginner';
+                
+                resultDiv.textContent = `✅ Questionnaire data found and processed:
+
+Raw Data:
+- Preferred Domains: ${parsed.preferredDomains.join(', ')}
+- Experience: ${parsed.experience}
+- Learning Style: ${parsed.learningStyle}
+
+Processed for Analysis:
+- Primary Skill: ${primarySkill}
+- Experience Level: ${experienceLevel}
+- Location: India (default)
+
+The analysis page should use these values automatically.`;
+                
+                resultDiv.className = 'result success';
+            } else {
+                resultDiv.textContent = '❌ No questionnaire data found. Analysis page will show default settings and questionnaire prompt.';
+                resultDiv.className = 'result warning';
+            }
+        }
+    </script>
+</body>
+</html>

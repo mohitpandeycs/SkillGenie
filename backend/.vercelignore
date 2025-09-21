@@ -1,0 +1,33 @@
+# Vercel ignore file for backend
+
+# Test files
+test-*
+*.test.js
+__tests__
+
+# Development files
+.env
+*.log
+logs/
+
+# Documentation
+*.md
+!README.md
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary
+tmp/
+temp/
+
+# Debug files
+debug-*
+
+# Example files
+*.example
