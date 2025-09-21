@@ -3,9 +3,23 @@
 [![React](https://img.shields.io/badge/React-18.2.0-blue.svg)](https://reactjs.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-18.x-green.svg)](https://nodejs.org/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.2.7-blue.svg)](https://tailwindcss.com/)
+[![Google Gemini AI](https://img.shields.io/badge/Google%20Gemini-AI%20Powered-orange.svg)](https://ai.google.dev/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-SkillGenie is an AI-driven career intelligence platform that designs adaptive learning roadmaps aligned with individual interests and industry demand. It recommends skills, careers, and curated resources while providing market analytics and 5-8 year growth projections for informed career decisions.
+## 🚀 Live Demo
+**Frontend:** [SkillGenie Live](https://skillgenie-frontend.vercel.app)  
+**Backend API:** [SkillGenie API](https://skillgenie-backend.vercel.app)
+
+## 📖 Overview
+
+SkillGenie is a cutting-edge AI-driven career intelligence platform that revolutionizes professional development by creating personalized learning roadmaps. Powered by **Google Gemini AI**, it analyzes individual skills, interests, and market trends to deliver intelligent career guidance, curated learning paths, and real-time industry insights.
+
+### 🎯 What Makes SkillGenie Special?
+- **AI-First Approach**: Deep integration with Google Gemini AI for intelligent analysis
+- **Real-Time Market Intelligence**: Live job market analysis and salary projections
+- **Personalized Learning**: Adaptive roadmaps based on individual learning patterns
+- **Industry Partnerships**: Direct access to internships, jobs, and freelance opportunities
+- **24/7 AI Mentor**: Your personal career coach available anytime
 
 ## 🌟 Features
 
@@ -40,8 +54,8 @@ SkillGenie is an AI-driven career intelligence platform that designs adaptive le
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/skillgenie.git
-   cd skillgenie
+   git clone https://github.com/mohitpandeycs/SkillGenie.git
+   cd SkillGenie
    ```
 
 2. **Install frontend dependencies**
@@ -57,11 +71,44 @@ SkillGenie is an AI-driven career intelligence platform that designs adaptive le
    ```
 
 4. **Set up environment variables**
+   
+   **Backend Configuration:**
    ```bash
-   # Backend
    cd backend
    cp .env.example .env
-   # Edit .env with your configuration
+   ```
+   
+   Edit the `.env` file with your API keys:
+   ```env
+   # Server Configuration
+   NODE_ENV=development
+   PORT=5000
+   
+   # AI Services (Required)
+   GEMINI_API_KEY=your-gemini-api-key-here
+   YOUTUBE_API_KEY=your-youtube-api-key-here
+   GOOGLE_SEARCH_API_KEY=your-google-search-api-key-here
+   GOOGLE_SEARCH_ENGINE_ID=your-search-engine-id
+   
+   # JWT Configuration
+   JWT_SECRET=your-super-secret-jwt-key-here
+   JWT_EXPIRE=7d
+   
+   # Firebase Configuration (Optional)
+   FIREBASE_PROJECT_ID=your-firebase-project-id
+   FIREBASE_PRIVATE_KEY=your-firebase-private-key
+   ```
+   
+   **Frontend Configuration:**
+   ```bash
+   cd skillgenie
+   cp .env.example .env.local
+   ```
+   
+   Edit the `.env.local` file:
+   ```env
+   REACT_APP_API_URL=http://localhost:5000
+   REACT_APP_FIREBASE_API_KEY=your-firebase-api-key
    ```
 
 5. **Start the development servers**
@@ -160,10 +207,10 @@ SkillGuieni/
 - **Rate Limiting**: API protection
 
 ### AI/ML Integration
-- **Google Gemini AI**: Integrated for intelligent chat responses and career guidance
-- **LangChain**: AI workflow orchestration
-- **OpenAI API**: Additional AI capabilities (backup)
-- **BigQuery ML**: Advanced analytics and predictions (planned)
+- **Google Gemini AI 1.5 Flash**: Primary AI engine for career analysis and guidance
+- **YouTube Data API v3**: Content recommendation and educational resource curation
+- **Google Search API**: Real-time market research and trend analysis
+- **Custom AI Services**: Enhanced roadmap generation and personalized mentoring
 
 ## 📱 Key Pages & Features
 
@@ -228,50 +275,94 @@ SkillGuieni/
 - Events and hackathons
 - Application tracking
 
-## 🔌 API Endpoints
+## 🔌 API Documentation
 
-### Authentication
-- `POST /api/auth/register` - User registration
-- `POST /api/auth/login` - User login
-- `POST /api/auth/google` - Google OAuth
-- `POST /api/auth/github` - GitHub OAuth
-- `POST /api/auth/verify` - Token verification
+### 🌐 Base URL
+- **Development:** `http://localhost:5000`
+- **Production:** `https://skillgenie-backend.vercel.app`
 
-### User Management
-- `GET /api/users/profile` - Get user profile
-- `PUT /api/users/profile` - Update profile
-- `GET /api/users/progress` - Get learning progress
-- `GET /api/users/achievements` - Get user achievements
+### 🔐 Authentication
+All protected routes require a Bearer token in the Authorization header:
+```
+Authorization: Bearer <your-jwt-token>
+```
 
-### Roadmaps
-- `GET /api/roadmaps` - Get user roadmaps
-- `POST /api/roadmaps/generate` - Generate new roadmap
-- `GET /api/roadmaps/:id` - Get specific roadmap
-- `PUT /api/roadmaps/:id/progress` - Update progress
+### 📋 Core Endpoints
 
-### Chat System
-- `POST /api/chat/message` - Send message to AI
-- `GET /api/chat/conversations` - Get chat history
-- `GET /api/chat/suggestions` - Get suggested questions
+#### **Authentication**
+```http
+POST /api/auth/register
+POST /api/auth/login
+POST /api/auth/google
+POST /api/auth/verify
+```
 
-### Quizzes
-- `GET /api/quizzes/chapter/:id` - Get chapter quiz
-- `POST /api/quizzes/:id/submit` - Submit quiz answers
-- `GET /api/quizzes/history` - Get quiz history
-- `GET /api/quizzes/leaderboard` - Get leaderboard
+#### **AI Services**
+```http
+POST /api/ai/analyze               # AI career analysis
+POST /api/ai/chat                  # Chat with AI mentor
+POST /api/ai/roadmap/generate      # Generate learning roadmap
+POST /api/ai/roadmap/enhance       # Enhance existing roadmap
+GET  /api/ai/skills/trending       # Get trending skills
+```
 
-### Career Services
-- `GET /api/careers/jobs` - Get job opportunities
-- `GET /api/careers/freelance` - Get freelance gigs
-- `GET /api/careers/internships` - Get internships
-- `GET /api/careers/events` - Get events
-- `POST /api/careers/apply` - Apply for opportunity
+#### **User Management**
+```http
+GET  /api/users/profile            # Get user profile
+PUT  /api/users/profile            # Update profile
+GET  /api/users/progress           # Get learning progress
+POST /api/users/questionnaire      # Submit user questionnaire
+```
 
-### Analytics
-- `GET /api/analytics/market` - Market analysis
-- `GET /api/analytics/user-progress` - Progress analytics
-- `GET /api/analytics/skill-demand` - Skill demand data
-- `GET /api/analytics/learning-insights` - AI insights
+#### **Content & Resources**
+```http
+GET  /api/content/youtube          # Get YouTube recommendations
+GET  /api/content/courses          # Get course recommendations
+GET  /api/content/articles         # Get article recommendations
+GET  /api/content/projects         # Get project ideas
+```
+
+#### **Analytics & Insights**
+```http
+GET  /api/analytics/market         # Market analysis data
+GET  /api/analytics/salary         # Salary insights
+GET  /api/analytics/demand         # Skill demand analytics
+GET  /api/analytics/growth         # Career growth projections
+```
+
+### 📨 Example API Calls
+
+#### Generate AI Roadmap
+```javascript
+const response = await fetch('/api/ai/roadmap/generate', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer ' + token
+  },
+  body: JSON.stringify({
+    domain: 'Full Stack Development',
+    experience: 'beginner',
+    timeframe: '6 months',
+    goals: ['Build web applications', 'Learn React', 'Master Node.js']
+  })
+});
+```
+
+#### Chat with AI Mentor
+```javascript
+const response = await fetch('/api/ai/chat', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer ' + token
+  },
+  body: JSON.stringify({
+    message: 'What should I learn to become a full-stack developer?',
+    context: 'career_guidance'
+  })
+});
+```
 
 ## 🔒 Security Features
 
@@ -284,41 +375,70 @@ SkillGuieni/
 
 ## 🚀 Deployment
 
-### Frontend (React)
+### 🌐 Vercel Deployment (Recommended)
+
+#### **Frontend Deployment**
 ```bash
-# Build for production
+cd skillgenie
 npm run build
-
-# Deploy to Netlify, Vercel, or Firebase Hosting
+vercel --prod
 ```
 
-### Backend (Node.js)
+#### **Backend Deployment**
 ```bash
-# Set production environment
-export NODE_ENV=production
-
-# Start production server
-npm start
-
-# Deploy to Heroku, Railway, or Google Cloud Run
+cd backend
+vercel --prod
 ```
 
-### Environment Variables
+#### **Environment Variables Setup**
+In your Vercel dashboard, add these environment variables:
+
+**Frontend Variables:**
 ```env
-# Backend Configuration
-NODE_ENV=production
-PORT=5000
-JWT_SECRET=your-secret-key
-MONGODB_URI=your-database-url
-
-# Firebase Configuration
-FIREBASE_PROJECT_ID=your-project-id
-FIREBASE_PRIVATE_KEY=your-private-key
-
-# AI Services
-OPENAI_API_KEY=your-openai-key
-GOOGLE_CLOUD_PROJECT_ID=your-gcp-project
+REACT_APP_API_URL=https://your-backend-domain.vercel.app
+REACT_APP_FIREBASE_API_KEY=your-firebase-api-key
 ```
+
+**Backend Variables:**
+```env
+NODE_ENV=production
+GEMINI_API_KEY=your-gemini-api-key-here
+YOUTUBE_API_KEY=your-youtube-api-key-here
+GOOGLE_SEARCH_API_KEY=your-google-search-api-key-here
+JWT_SECRET=your-super-secret-jwt-key-here
+```
+
+### 🔧 Alternative Deployment Options
+
+#### **Netlify (Frontend)**
+```bash
+cd skillgenie
+npm run build
+# Upload dist folder to Netlify
+```
+
+#### **Heroku (Backend)**
+```bash
+cd backend
+heroku create skillgenie-api
+git push heroku main
+heroku config:set GEMINI_API_KEY=your-key
+```
+
+#### **Railway (Full Stack)**
+```bash
+railway login
+railway init
+railway up
+```
+
+### 📦 Production Checklist
+- [ ] All API keys configured
+- [ ] CORS settings updated
+- [ ] Environment variables set
+- [ ] SSL certificates enabled
+- [ ] Rate limiting configured
+- [ ] Error monitoring setup
 
 ## 🤝 Contributing
 
@@ -349,12 +469,28 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Lucide** for beautiful icons
 - **Recharts** for data visualization
 
-## 📞 Support
+## 👥 Team
 
-For support and questions:
-- 📧 Email: support@skillgenie.app
-- 💬 Discord: [SkillGenie Community](https://discord.gg/skillgenie)
-- 📖 Documentation: [docs.skillgenie.app](https://docs.skillgenie.app)
+### **Core Contributors**
+- **[Mohit Pandey](https://github.com/mohitpandeycs)** - Lead Developer & AI Integration
+- **[Anant Ray](https://github.com/Anant-4-code)** - Frontend Developer & UI/UX Designer
+
+### **Project Lead**
+**Mohit Pandey** - Full Stack Developer specializing in AI-powered applications
+- 🎓 Experience in React, Node.js, and AI integration
+- 🌟 Passionate about democratizing career guidance through technology
+
+## 📞 Support & Contact
+
+### **Get Help**
+- 📧 **Email**: [code4mohit@gmail.com](mailto:code4mohit@gmail.com)
+- 💬 **GitHub Issues**: [Report bugs or request features](https://github.com/mohitpandeycs/SkillGenie/issues)
+- 📖 **Documentation**: Check our detailed setup guides in the repo
+
+### **Connect With Us**
+- 🐙 **GitHub**: [@mohitpandeycs](https://github.com/mohitpandeycs)
+- 🐙 **GitHub**: [@Anant-4-code](https://github.com/Anant-4-code)
+- 💼 **LinkedIn**: Connect for professional discussions
 
 ## 🗺️ Roadmap
 
@@ -365,27 +501,42 @@ For support and questions:
 - ✅ Quiz system
 - ✅ Career opportunities
 
-### Phase 2 (Next)
+### Phase 2 (In Progress) 🔄
 - ✅ Real AI integration (Google Gemini AI)
-- 🔄 Database integration (MongoDB/PostgreSQL)
-- 🔄 Real-time chat system
+- ✅ YouTube content integration
+- ✅ Google Search API integration
 - 🔄 Advanced analytics dashboard
+- 🔄 Real-time progress tracking
+- 🔄 Enhanced AI chat capabilities
 
-### Phase 3 (Future)
+### Phase 3 (Planned) 📅
 - 📅 Mobile app (React Native)
-- 📅 Offline learning capabilities
-- 📅 Peer-to-peer mentorship
+- 📅 Database integration (MongoDB/PostgreSQL)
+- 📅 Real-time collaboration features
+- 📅 Peer-to-peer mentorship platform
 - 📅 Corporate training modules
 - 📅 Multi-language support
+- 📅 Offline learning capabilities
+
+### Phase 4 (Future Vision) 🚀
+- 📅 VR/AR learning experiences
+- 📅 Blockchain certification system
+- 📅 AI-powered interview preparation
+- 📅 Industry partnerships program
+- 📅 Global skill marketplace
 
 ---
 
 <div align="center">
 
-**Built with ❤️ by the SkillGenie Team**
+## 🌟 **Built with ❤️ by the SkillGenie Team**
 
-[Website](https://skillgenie.app) • [Documentation](https://docs.skillgenie.app) • [Community](https://discord.gg/skillgenie)
+### *Empowering careers through AI-driven intelligence*
+
+[![GitHub Repo](https://img.shields.io/badge/GitHub-SkillGenie-blue?style=for-the-badge&logo=github)](https://github.com/mohitpandeycs/SkillGenie) 
+[![Contributors](https://img.shields.io/badge/Contributors-2-orange?style=for-the-badge)](https://github.com/mohitpandeycs/SkillGenie/graphs/contributors)
+[![MIT License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](https://opensource.org/licenses/MIT)
+
+**[⭐ Star this repo](https://github.com/mohitpandeycs/SkillGenie) • [🐛 Report Bug](https://github.com/mohitpandeycs/SkillGenie/issues) • [💡 Request Feature](https://github.com/mohitpandeycs/SkillGenie/issues/new)**
 
 </div>
-#   S k i l l G e n i e  
- 
